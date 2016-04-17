@@ -51,6 +51,7 @@ def draw_matches(img1, kp1, img2, kp2, matches, color=None):
 
     plt.imshow(new_img)
     plt.show()
+box_id = []
 
 img1_orig = cv2.imread('/home/anthuang/Documents/AutonomyBuoyTracking/buoy1.jpg', 1)
 img2_orig = cv2.imread('/home/anthuang/Documents/AutonomyBuoyTracking/buoy2.jpg', 1)
@@ -122,7 +123,13 @@ for idx in range(len(kp2)):
     elif kp1[idx].pt[1] > maxy:
         maxy = kp2[idx].pt[1]
 
-cv2.rectangle(img2_res, (int(minx - threshold + cut_x1), int(miny - threshold + cut_y1)), (int(maxx + threshold + cut_x1), int(maxy + threshold + cut_y1)), (255,0,0), 2)
+rect1 = (int(minx - threshold + cut_x1), int(miny - threshold + cut_y1))
+rect2 = (int(maxx + threshold + cut_x1), int(maxy + threshold + cut_y1))
+
+cv2.rectangle(img2_res, rect1, rect2, (255,0,0), 2)
+
+box_id.append((rect1, rect2))
+print(box_id)
 
 # create BFMatcher object
 bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
@@ -130,5 +137,5 @@ bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
 # Match descriptors.
 matches = bf.match(des1, des2)
 
-draw_matches(img1, kp1, img2, kp2, matches)
-plt.imshow(img2_res), plt.show()
+# draw_matches(img1, kp1, img2, kp2, matches)
+# plt.imshow(img2_res), plt.show()
