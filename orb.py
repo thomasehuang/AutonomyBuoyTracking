@@ -52,6 +52,7 @@ def draw_matches(img1, kp1, img2, kp2, matches, color=None):
     plt.imshow(new_img)
     plt.show()
 box_id = []
+track_id = 0
 
 img1_orig = cv2.imread('/home/anthuang/Documents/AutonomyBuoyTracking/buoy1.jpg', 1)
 img2_orig = cv2.imread('/home/anthuang/Documents/AutonomyBuoyTracking/buoy2.jpg', 1)
@@ -61,10 +62,8 @@ img1_res = cv2.resize(img1_trans, (1000, 750))
 img2_res = cv2.resize(img2_trans, (1000, 750))
 
 threshold = 10
-
 coords1 = (477, 363)
 coords2 = (550, 450)
-
 cut_x1 = coords1[0] - threshold * 5
 cut_x2 = coords2[0] + threshold * 5
 cut_y1 = coords1[1] - threshold * 5
@@ -127,8 +126,9 @@ rect1 = (int(minx - threshold + cut_x1), int(miny - threshold + cut_y1))
 rect2 = (int(maxx + threshold + cut_x1), int(maxy + threshold + cut_y1))
 
 cv2.rectangle(img2_res, rect1, rect2, (255,0,0), 2)
+track_id = track_id + 1
 
-box_id.append((rect1, rect2))
+box_id.append([1, (rect1, rect2)])
 print(box_id)
 
 # create BFMatcher object
@@ -138,4 +138,4 @@ bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
 matches = bf.match(des1, des2)
 
 # draw_matches(img1, kp1, img2, kp2, matches)
-# plt.imshow(img2_res), plt.show()
+plt.imshow(img2_res), plt.show()
